@@ -33,15 +33,15 @@ func randomRefuelTime() int {
 	return rand.Intn(3) + 3
 }
 
-func GenerateCars(count int) []Car {
-	var cars []Car
+func GenerateCars(count int) []*Car {
+	var cars []*Car
 	for i := 0; i < count; i++ {
 		carType := randomFuelType()
 		fillUpDuration := randomRefuelTime()
 		if carType == fuel.Electric {
 			fillUpDuration *= 3
 		}
-		cars = append(cars, Car{
+		cars = append(cars, &Car{
 			Id:             i + 1,
 			RefuelDuration: time.Second * time.Duration(fillUpDuration),
 			FuelType:       carType,

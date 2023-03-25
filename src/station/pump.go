@@ -14,10 +14,10 @@ type Pump struct {
 
 func (p Pump) Run(checkouts chan *car.Car) {
 	for c := range p.Queue {
-		fmt.Printf("%v is refueling, waiting for %v..\n", c, c.RefuelDuration)
+		fmt.Printf("⛽️  %v is refueling, waiting for %v..\n", c, c.RefuelDuration)
 		c.Refuel()
 		c.RefueledAt = time.Now()
-		fmt.Printf("%v successfully refueled, moved to checkout..\n", c)
+		fmt.Printf("🤑  %v successfully refueled, moved to checkout..\n", c)
 		checkouts <- c
 	}
 }
