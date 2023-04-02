@@ -30,7 +30,6 @@ func (p Pump) Run(checkouts chan *car.Car) {
 				case ch <- c:
 					isWaiting = false
 					go p.refuel(ch, c, checkouts)
-					break
 				default:
 				}
 				if !isWaiting {
