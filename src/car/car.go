@@ -2,6 +2,7 @@ package car
 
 import (
 	"fmt"
+	"gas-station-simulator/src/constants"
 	"gas-station-simulator/src/fuel"
 	"math/rand"
 	"time"
@@ -25,25 +26,17 @@ func (car Car) String() string {
 	return fmt.Sprintf("%v car (id: %d)", car.FuelType, car.Id)
 }
 
-func randomFuelType() fuel.Fuel {
-	return fuel.Types[rand.Intn(len(fuel.Types))]
-}
-
-func randomRefuelTime() int {
-	return rand.Intn(3) + 3
-}
-
 func GenerateCars(count int) []*Car {
 	var cars []*Car
 	for i := 0; i < count; i++ {
-		carType := randomFuelType()
-		fillUpDuration := randomRefuelTime()
+		carType := fuel.Types[rand.Intn(len(fuel.Types))]
+		fillUpDuration := rand.Intn(5) + 1
 		if carType == fuel.Electric {
-			fillUpDuration *= 3
+			fillUpDuration = rand.Intn(8) + 3
 		}
 		cars = append(cars, &Car{
 			Id:             i + 1,
-			RefuelDuration: time.Second * time.Duration(fillUpDuration),
+			RefuelDuration: constants.Time * time.Duration(fillUpDuration),
 			FuelType:       carType,
 		})
 	}

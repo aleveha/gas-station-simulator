@@ -3,6 +3,7 @@ package station
 import (
 	"fmt"
 	"gas-station-simulator/src/car"
+	"gas-station-simulator/src/constants"
 	"gas-station-simulator/src/fuel"
 	"math/rand"
 	"sync"
@@ -22,7 +23,7 @@ func (gs GasStation) runPumps() {
 
 func (gs GasStation) proceedCheckout(wg *sync.WaitGroup) {
 	for chC := range gs.Checkouts {
-		time.Sleep(time.Second)
+		time.Sleep(2 * constants.Time)
 		chC.LeftAt = time.Now()
 		fmt.Printf("✅   %v left the station after checkout at %v\n", chC, time.Now().Format("15:04:05.000"))
 		wg.Done()
@@ -33,8 +34,8 @@ func (gs GasStation) addCarToQueue(c *car.Car, wg *sync.WaitGroup) {
 	select {
 	case gs.Pumps[c.FuelType].Queue <- c:
 		c.ArrivedAtPump = time.Now()
-		fmt.Printf("🕓  %v arrived to a pump and waiting in a queue\n", c)
-	case <-time.After(time.Second):
+		fmt.Printf("🕓  %v arrived at %v pump queue\n", c, c.FuelType)
+	case <-time.After(constants.Time / 1000):
 		c.LeftAt = time.Now()
 		fmt.Printf("❌  %v left the station because of long wating time at %v\n", c, time.Now().Format("15:04:05.000"))
 		wg.Done()
@@ -46,7 +47,7 @@ func (gs GasStation) start(cars []*car.Car, wg *sync.WaitGroup) {
 		c.ArrivedAtStation = time.Now()
 		fmt.Printf("🚗  %v arrived to a gas station at %v\n", c, time.Now().Format("15:04:05.000"))
 		go gs.addCarToQueue(c, wg)
-		time.Sleep(time.Duration(rand.Intn(4)) * time.Second) // simulate time between car arrivals
+		time.Sleep(time.Duration(rand.Intn(6)) * constants.Time) // simulate time between car arrivals
 	}
 }
 
