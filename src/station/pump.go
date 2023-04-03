@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gas-station-simulator/src/car"
 	"gas-station-simulator/src/fuel"
-	"sync"
 	"time"
 )
 
@@ -23,17 +22,13 @@ func (p Pump) refuel(c *car.Car, checkouts chan *car.Car) {
 }
 
 func (p Pump) Run(checkouts chan *car.Car) {
-	wg := &sync.WaitGroup{}
-	wg.Add(p.Nipples)
 	for i := 0; i < p.Nipples; i++ {
 		go func() {
-			defer wg.Done()
 			for c := range p.Queue {
 				p.refuel(c, checkouts)
 			}
 		}()
 	}
-	wg.Wait()
 }
 
 func GeneratePumps() map[fuel.Fuel]Pump {
